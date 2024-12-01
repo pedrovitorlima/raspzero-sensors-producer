@@ -46,7 +46,7 @@ while(True):
       "device": "pi_zero",
       "sensor": "temperature",
       "reading": sensors.read_temperature(),
-      "date": datetime.now(),
+      "date": datetime.now().isoformat(),
     },
     {
       "device": "pi_zero",
