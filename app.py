@@ -5,6 +5,7 @@ import json
 from dotenv import load_dotenv
 import paho.mqtt.client as mqtt
 import time
+import re
 
 load_dotenv()
 
@@ -18,13 +19,16 @@ class Sensors:
 
   def read_temperature(self):
     temp = os.popen('vcgencmd measure_temp').readline()
-    return temp.strip()
-  
+    temp_value = re.search(r"(\d+\.\d+)", temp)  # Match a decimal number
+    if temp_value:
+      return float(temp_value.group(1))  # Return the number as a float
+    return None  # In case of an error
+
   def read_cpu(self):
     return psutil.cpu_percent()
   
   def read_ram(self):
-    return psutil.virtual_memory()
+    return psutil.virtual_memory().percent
   
   def produce(self, messages):
     client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
