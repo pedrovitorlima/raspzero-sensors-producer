@@ -28,11 +28,11 @@ class Sensors:
   
   def produce(self, messages):
     client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
-    print(f'{self.mqtt_broker} / {self.mqtt_user} / {self.mqtt_topic}')
     client.username_pw_set(self.mqtt_user, self.mqtt_password)
     client.connect(self.mqtt_broker, self.mqtt_port, 60)
 
     for message in messages:
+      print(message)
       client.publish(self.mqtt_topic, json.dumps(message))
     
     client.disconnect()
