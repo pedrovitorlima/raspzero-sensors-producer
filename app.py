@@ -36,7 +36,6 @@ class Sensors:
     client.connect(self.mqtt_broker, self.mqtt_port, 60)
 
     for message in messages:
-      print(message)
       client.publish(self.mqtt_topic, json.dumps(message))
     
     client.disconnect()
