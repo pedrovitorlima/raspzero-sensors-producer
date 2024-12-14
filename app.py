@@ -18,7 +18,7 @@ class Sensors:
     self.mqtt_password = os.getenv("BROKER_PASSWORD")
 
   def read_temperature(self):
-    temp = "10" #os.popen('vcgencmd measure_temp').readline()
+    temp = os.popen('vcgencmd measure_temp').readline()
     temp_value = re.search(r"(\d+\.\d+)", temp)  # Match a decimal number
     if temp_value:
       return float(temp_value.group(1))  # Return the number as a float
