@@ -18,7 +18,7 @@ class Sensors:
     self.mqtt_password = os.getenv("BROKER_PASSWORD")
 
   def read_temperature(self):
-    temp = os.popen('vcgencmd measure_temp').readline()
+    temp = "10" #os.popen('vcgencmd measure_temp').readline()
     temp_value = re.search(r"(\d+\.\d+)", temp)  # Match a decimal number
     if temp_value:
       return float(temp_value.group(1))  # Return the number as a float
@@ -37,33 +37,34 @@ class Sensors:
 
     for message in messages:
       client.publish(self.mqtt_topic, json.dumps(message))
+      print(f'message {message} produced')
     
     client.disconnect()
 
 if __name__ == "__main__":
   sensors = Sensors()
 
-while(True):
-  messages = [
-    {
-      "device": "pi_zero",
-      "sensor": "temperature",
-      "reading": sensors.read_temperature(),
-      "date": datetime.now().isoformat(),
-    },
-    {
-      "device": "pi_zero",
-      "sensor": "cpu",
-      "reading": sensors.read_cpu(),
-      "date": datetime.now().isoformat(),
-    },
-    {
-      "device": "pi_zero",
-      "sensor": "ram",
-      "reading": sensors.read_ram(),
-      "date": datetime.now().isoformat(),
-    },
-  ]
+  while(True):
+    messages = [
+      {
+        "device": "pi_zero",
+        "sensor": "temperature",
+        "reading": sensors.read_temperature(),
+        "date": datetime.now().isoformat(),
+      },
+      {
+        "device": "pi_zero",
+        "sensor": "cpu",
+        "reading": sensors.read_cpu(),
+        "date": datetime.now().isoformat(),
+      },
+      {
+        "device": "pi_zero",
+        "sensor": "ram",
+        "reading": sensors.read_ram(),
+        "date": datetime.now().isoformat(),
+      },
+    ]
 
-  sensors.produce(messages)
-  time.sleep(30)
+    sensors.produce(messages)
+    time.sleep(30)
